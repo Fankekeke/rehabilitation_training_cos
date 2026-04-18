@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="新增巡检" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="新增回访" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -11,20 +11,20 @@
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
-          <a-form-item label='选择员工' v-bind="formItemLayout">
+          <a-form-item label='选择康复师' v-bind="formItemLayout">
             <a-select allowClear v-decorator="[
               'staffId',
-              { rules: [{ required: true, message: '请输入员工姓名!' }] }
+              { rules: [{ required: true, message: '请输入康复师姓名!' }] }
               ]">
               <a-select-option :value="item.id" v-for="(item, index) in staffList" :key="index">{{ item.name }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label='器材名称' v-bind="formItemLayout">
+          <a-form-item label='回访客户' v-bind="formItemLayout">
             <a-input v-decorator="[
             'stationName',
-            { rules: [{ required: true, message: '请输入器材名称!' }] }
+            { rules: [{ required: true, message: '请输入回访客户!' }] }
             ]"/>
           </a-form-item>
         </a-col>
@@ -41,10 +41,10 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label='巡检内容' v-bind="formItemLayout">
+          <a-form-item label='回访内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
             'content',
-             { rules: [{ required: true, message: '请输入巡检内容!' }] }
+             { rules: [{ required: true, message: '请输入回访内容!' }] }
             ]"/>
           </a-form-item>
         </a-col>

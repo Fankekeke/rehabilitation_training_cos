@@ -170,10 +170,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    @Transactional
-    public void regist(String username, String password, String name) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public void regist(String username, String password) throws Exception {
         User user = new User();
-        user.setUserType(2);
         user.setPassword(MD5Util.encrypt(username, password));
         user.setUsername(username);
         user.setCreateTime(new Date());
@@ -181,15 +180,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setSsex(User.SEX_UNKNOW);
         user.setAvatar(User.DEFAULT_AVATAR);
         user.setDescription("注册用户");
+        user.setRoleFlag("1");
+        user.setName(username);
         this.save(user);
 
-        StaffInfo staffInfo = new StaffInfo();
-        staffInfo.setUserId(Math.toIntExact(user.getUserId()));
-        staffInfo.setName(name);
-        staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        staffInfo.setCode("STF-" + System.currentTimeMillis());
-        staffInfo.setSex("1");
-        staffInfoService.save(staffInfo);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(Math.toIntExact(user.getUserId()));
+        userInfo.setCode("UR-" + System.currentTimeMillis());
+        userInfo.setName(username);
+        userInfo.setType("1");
+        userInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        userInfoService.save(userInfo);
 
         UserRole ur = new UserRole();
         ur.setUserId(user.getUserId());
@@ -203,33 +204,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     }
 
+    /**
+     * 注册康复师
+     *
+     * @param staffInfo 康复师信息
+     */
     @Override
-    public UserInfo registUser(UserInfo userInfo, String password) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public void registerStaff(StaffInfo staffInfo) throws Exception {
         User user = new User();
-        user.setUserType(2);
-        user.setPassword(MD5Util.encrypt(userInfo.getCode(), password));
-        user.setUsername(userInfo.getCode());
+        user.setPassword(MD5Util.encrypt(staffInfo.getCode(), "1234qwer"));
+        user.setUsername(staffInfo.getCode());
         user.setCreateTime(new Date());
         user.setStatus(User.STATUS_VALID);
         user.setSsex(User.SEX_UNKNOW);
         user.setAvatar(User.DEFAULT_AVATAR);
-        user.setDescription("注册用户");
+        user.setDescription("注册康复师");
+        user.setName(staffInfo.getName());
+        user.setImages(staffInfo.getImages());
+        user.setRoleFlag("2");
         this.save(user);
-
-        userInfo.setUserId(Math.toIntExact(user.getUserId()));
-        userInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        userInfoService.save(userInfo);
 
         UserRole ur = new UserRole();
         ur.setUserId(user.getUserId());
-        ur.setRoleId(75L); // 注册用户角色 ID
+        ur.setRoleId(75L);
         this.userRoleMapper.insert(ur);
+
+        staffInfo.setUserId(Math.toIntExact(user.getUserId()));
+        staffInfo.setSysUserId(Math.toIntExact(user.getUserId()));
+        staffInfoService.save(staffInfo);
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(Math.toIntExact(user.getUserId()));
+        userInfo.setUserStaffId(Math.toIntExact(staffInfo.getId()));
+        userInfo.setCode(staffInfo.getCode());
+        userInfo.setName(staffInfo.getName());
+        userInfo.setImages(staffInfo.getImages());
+        userInfo.setCreateDate(staffInfo.getCreateDate());
+        userInfo.setType("2");
+        userInfoService.save(userInfo);
 
         // 创建用户默认的个性化配置
         userConfigService.initDefaultUserConfig(String.valueOf(user.getUserId()));
         // 将用户相关信息保存到 Redis中
         userManager.loadUserRedisCache(user);
-        return userInfo;
     }
 
     @Override

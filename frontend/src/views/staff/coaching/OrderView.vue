@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="课程订单" @cancel="onClose" :width="1000">
+  <a-modal v-model="show" title="治疗项目" @cancel="onClose" :width="1000">
     <template slot="footer">
       <a-button key="back" @click="onClose" type="danger">
         关闭
@@ -16,7 +16,7 @@
 <!--      </div>-->
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
-        <a-col :span="8"><b>订单编号：</b>
+        <a-col :span="8"><b>项目编号：</b>
           {{ orderData.code }}
         </a-col>
         <a-col :span="8"><b>下单时间：</b>
@@ -41,6 +41,8 @@
           <span v-if="orderData.type == 4">微举重训练</span>
           <span v-if="orderData.type == 5">双手臂训练</span>
           <span v-if="orderData.type == 6">胸部肌肉训练</span>
+          <span v-if="orderData.type == 7">运动心肺训练</span>
+          <span v-if="orderData.type == 8">脊柱矫正训练</span>
         </a-col>
         <a-col :span="8"><b>治疗师姓名：</b>
           {{ orderData.userName }}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.ContentVotesMapper">
+
+    <select id="queryPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        cv.id,
+        cv.user_id,
+        cv.answer_id,
+        cv.vote_type,
+        cv.created_at,
+        ui.`name` AS userName,
+        ui.images AS userImages,
+        pq.title,
+        pq.content AS questionContent,
+        pa.content
+        FROM
+        content_votes cv
+        LEFT JOIN user_info ui ON (ui.id = cv.user_id)
+        LEFT JOIN party_answers pa ON (pa.id = cv.answer_id)
+        LEFT JOIN party_questions pq ON (pq.id = pa.question_id)
+        WHERE
+        1 = 1
+        <if test="queryFrom.userName != null and queryFrom.userName != ''">
+            AND ui.`name` LIKE CONCAT('%',#{queryFrom.userName},'%')
+        </if>
+        <if test="queryFrom.title != null and queryFrom.title != ''">
+            AND pq.title LIKE CONCAT('%',#{queryFrom.title},'%')
+        </if>
+        <if test="queryFrom.voteType != null and queryFrom.voteType != ''">
+            AND cv.vote_type = #{queryFrom.voteType}
+        </if>
+        <if test="queryFrom.userId != null and queryFrom.userId != ''">
+            AND ui.user_id = #{queryFrom.userId}
+        </if>
+        ORDER BY
+        cv.created_at DESC
+    </select>
+</mapper>

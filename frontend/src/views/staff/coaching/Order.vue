@@ -177,6 +177,10 @@ export default {
               return <a-tag>双手臂训练</a-tag>
             case '6':
               return <a-tag>胸部肌肉训练</a-tag>
+            case '7':
+              return <a-tag>运动心肺训练</a-tag>
+            case '8':
+              return <a-tag>脊柱矫正训练</a-tag>
             default:
               return '- -'
           }
@@ -333,7 +337,7 @@ export default {
     },
     handleinspectionEditSuccess () {
       this.inspectionEdit.visiable = false
-      this.$message.success('修改巡检成功')
+      this.$message.success('修改回访成功')
       this.search()
     },
     handleorderEditClose () {

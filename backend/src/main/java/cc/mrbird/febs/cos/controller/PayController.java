@@ -2,13 +2,19 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AlipayBean;
+import cc.mrbird.febs.cos.entity.ServiceReserveInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IUserInfoService;
 import cc.mrbird.febs.cos.service.PayService;
+import cn.hutool.core.date.DateUtil;
 import com.alipay.api.AlipayApiException;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/cos/pay")
@@ -37,8 +43,26 @@ public class PayController {
         return R.ok(result);
     }
 
+    @PostMapping(value = "/alipay")
+    public R alipay(ServiceReserveInfo serviceReserveInfo) throws AlipayApiException {
+        serviceReserveInfo.setCode("SOR-" + System.currentTimeMillis());
+        serviceReserveInfo.setStatus("0");
+        serviceReserveInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, serviceReserveInfo.getUserId()));
+        serviceReserveInfo.setUserId(userInfo.getId());
+
+//        AlipayBean alipayBean = new AlipayBean();
+//        alipayBean.setOut_trade_no(outTradeNo);
+//        alipayBean.setSubject(subject);
+//        alipayBean.setTotal_amount(totalAmount);
+//        alipayBean.setBody(body);
+//        String result = payService.aliPay(alipayBean);
+        return R.ok(true);
+    }
+
 //    /**
-//     * 购买教练
+//     * 购买康复师
 //     * @param subject
 //     * @param body
 //     * @return

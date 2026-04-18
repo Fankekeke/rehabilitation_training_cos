@@ -21,9 +21,32 @@
         <a-col :span="12">
           <a-form-item label='上传人' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'uploader',
+            'publisher',
             { rules: [{ required: true, message: '请输入上传人!' }] }
             ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='公告类型' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'type',
+              { rules: [{ required: true, message: '请输入公告类型!' }] }
+              ]">
+              <a-select-option value="1">系统公告</a-select-option>
+              <a-select-option value="2">活动通知</a-select-option>
+              <a-select-option value="3">紧急消息</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='公告状态' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'rackUp',
+              { rules: [{ required: true, message: '请输入公告状态!' }] }
+              ]">
+              <a-select-option value="0">下架</a-select-option>
+              <a-select-option value="1">已发布</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -32,6 +55,28 @@
             'content',
              { rules: [{ required: true, message: '请输入名称!' }] }
             ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='图册' v-bind="formItemLayout">
+            <a-upload
+              name="avatar"
+              action="http://127.0.0.1:9527/file/fileUpload/"
+              list-type="picture-card"
+              :file-list="fileList"
+              @preview="handlePreview"
+              @change="picHandleChange"
+            >
+              <div v-if="fileList.length < 8">
+                <a-icon type="plus" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
+            <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+              <img alt="example" style="width: 100%" :src="previewImage" />
+            </a-modal>
           </a-form-item>
         </a-col>
       </a-row>
@@ -113,7 +158,6 @@ export default {
       this.form.validateFields((err, values) => {
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
-          values.publisher = this.currentUser.userId
           this.loading = true
           this.$post('/cos/bulletin-info', {
             ...values

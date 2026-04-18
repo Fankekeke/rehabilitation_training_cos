@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.PartyQuestionsMapper">
+
+    <select id="queryPage" resultType="java.util.LinkedHashMap">
+        SELECT
+        pq.id,
+        pq.user_id,
+        pq.title,
+        pq.content,
+        pq.created_at,
+        pq.status,
+        ui.`name` AS userName,
+        ui.images AS userImages,
+        COUNT(pa.id) AS answerCount
+        FROM
+        party_questions pq
+        LEFT JOIN user_info ui ON (ui.id = pq.user_id)
+        LEFT JOIN party_answers pa ON (pa.question_id = pq.id)
+        WHERE
+        1 = 1
+        <if test="queryFrom.userName != null and queryFrom.userName != ''">
+            AND ui.`name` LIKE CONCAT('%',#{queryFrom.userName},'%')
+        </if>
+        <if test="queryFrom.title != null and queryFrom.title != ''">
+            AND pq.title LIKE CONCAT('%',#{queryFrom.title},'%')
+        </if>
+        <if test="queryFrom.userId != null and queryFrom.userId != ''">
+            AND ui.user_id = #{queryFrom.userId}
+        </if>
+        ORDER BY
+        pq.created_at DESC
+    </select>
+
+    <!-- 查询所有问题 -->
+    <select id="queryAllQuestions" resultType="java.util.LinkedHashMap">
+        SELECT
+        pq.id,
+        pq.user_id,
+        pq.title,
+        pq.content,
+        pq.created_at,
+        pq.status,
+        ui.`name` AS userName,
+        ui.images AS userImages,
+        ui.user_id AS sysUserId,
+        COUNT(pa.id) AS answerCount
+        FROM
+        party_questions pq
+        LEFT JOIN user_info ui ON (ui.id = pq.user_id)
+        LEFT JOIN party_answers pa ON (pa.question_id = pq.id)
+        WHERE
+        1 = 1
+        GROUP BY
+        pq.id
+        ORDER BY
+        pq.created_at DESC
+    </select>
+</mapper>

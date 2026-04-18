@@ -1,6 +1,6 @@
 <template>
   <a-drawer
-    title="添加课程订单"
+    title="添加治疗项目"
     :maskClosable="false"
     width=850
     placement="right"
@@ -25,6 +25,8 @@
               <a-select-option value="4">微举重训练</a-select-option>
               <a-select-option value="5">双手臂训练</a-select-option>
               <a-select-option value="6">胸部肌肉训练</a-select-option>
+              <a-select-option value="7">运动心肺训练</a-select-option>
+              <a-select-option value="8">脊柱矫正训练</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -203,7 +205,7 @@ export default {
         if (!err) {
           values.userId = this.currentUser.userId
           this.loading = true
-          this.$post('/cos/service-reserve-info', {
+          this.$post('/cos/order-reserve', {
             ...values
           }).then((r) => {
             this.reset()

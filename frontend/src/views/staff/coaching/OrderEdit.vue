@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="修改课程订单" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="修改治疗项目" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -25,6 +25,8 @@
               <a-select-option value="4">微举重训练</a-select-option>
               <a-select-option value="5">双手臂训练</a-select-option>
               <a-select-option value="6">胸部肌肉训练</a-select-option>
+              <a-select-option value="7">运动心肺训练</a-select-option>
+              <a-select-option value="8">脊柱矫正训练</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>

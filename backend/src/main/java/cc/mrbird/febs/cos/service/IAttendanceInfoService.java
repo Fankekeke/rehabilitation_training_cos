@@ -32,9 +32,9 @@ public interface IAttendanceInfoService extends IService<AttendanceInfo> {
     AttendanceInfo queryTodayCheck(Integer userId, String createDate);
 
     /**
-     * 根据教练ID查询考勤打卡
+     * 根据康复师ID查询考勤打卡
      *
-     * @param staffId 教练ID
+     * @param staffId 康复师ID
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> queryAttendanceByStaff(Integer staffId);
@@ -50,7 +50,7 @@ public interface IAttendanceInfoService extends IService<AttendanceInfo> {
     /**
      * 获取当天打卡状态
      *
-     * @param staffId 教练ID
+     * @param staffId 康复师ID
      * @return 结果
      */
     AttendanceInfo checkWorkByToday(Integer staffId);

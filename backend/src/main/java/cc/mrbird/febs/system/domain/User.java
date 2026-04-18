@@ -55,6 +55,10 @@ public class User implements Serializable {
 
     private Long deptId;
 
+    private String name;
+    private String images;
+    private String roleFlag;
+
     @ExcelField(value = "部门")
     private transient String deptName;
 

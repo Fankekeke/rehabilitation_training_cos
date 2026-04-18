@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="课程订单" @cancel="onClose" :width="1000">
+  <a-modal v-model="show" title="治疗项目" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose" type="danger">
         关闭
@@ -16,10 +16,10 @@
 <!--      </div>-->
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
-        <a-col :span="8"><b>订单编号：</b>
+        <a-col :span="8"><b>项目编号：</b>
           {{ orderData.code }}
         </a-col>
-        <a-col :span="8"><b>下单时间：</b>
+        <a-col :span="8"><b>创建时间：</b>
           {{ orderData.createDate ? orderData.createDate : '- -' }}
         </a-col>
         <a-col :span="8"><b>指导费用：</b>
@@ -29,10 +29,8 @@
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderData.status == 0">未支付</span>
-          <span v-if="orderData.status == 1">未接单</span>
-          <span v-if="orderData.status == 2">已接单</span>
-          <span v-if="orderData.status == 3">已完成</span>
+          <span v-if="orderData.status == 0">下架</span>
+          <span v-if="orderData.status == 1">上架</span>
         </a-col>
         <a-col :span="8"><b>训练类型：</b>
           <span v-if="orderData.type == 1">力量性运动</span>
@@ -41,6 +39,8 @@
           <span v-if="orderData.type == 4">微举重训练</span>
           <span v-if="orderData.type == 5">双手臂训练</span>
           <span v-if="orderData.type == 6">胸部肌肉训练</span>
+          <span v-if="orderData.type == 7">运动心肺训练</span>
+          <span v-if="orderData.type == 8">脊柱矫正训练</span>
         </a-col>
         <a-col :span="8"><b>治疗师姓名：</b>
           {{ orderData.userName }}

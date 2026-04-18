@@ -10,7 +10,9 @@
         bi.content,
         bi.images,
         bi.date AS createDate,
-        bi.uploader
+        bi.publisher,
+        bi.rack_up AS rackUp,
+        bi.type
         FROM
         bulletin_info bi
         WHERE 1 = 1
@@ -20,8 +22,8 @@
         <if test="bulletinInfo.content != null and bulletinInfo.content != ''">
             AND bi.content LIKE CONCAT('%',#{bulletinInfo.content},'%')
         </if>
-        <if test="bulletinInfo.uploader != null and bulletinInfo.uploader != ''">
-            AND bi.uploader LIKE CONCAT('%',#{bulletinInfo.uploader},'%')
+        <if test="bulletinInfo.publisher != null and bulletinInfo.publisher != ''">
+            AND bi.publisher LIKE CONCAT('%',#{bulletinInfo.publisher},'%')
         </if>
         ORDER BY bi.date DESC
     </select>

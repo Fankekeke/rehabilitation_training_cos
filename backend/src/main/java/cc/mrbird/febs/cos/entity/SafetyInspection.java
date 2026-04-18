@@ -25,7 +25,7 @@ public class SafetyInspection implements Serializable {
     private Integer id;
 
     /**
-     * 员工编号
+     * 康复师编号
      */
     private Integer staffId;
 

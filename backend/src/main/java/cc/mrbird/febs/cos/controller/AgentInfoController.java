@@ -3,6 +3,7 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AgentInfo;
+import cc.mrbird.febs.cos.entity.NotifyInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IAgentInfoService;
 import cc.mrbird.febs.cos.service.INotifyInfoService;
@@ -82,7 +83,7 @@ public class AgentInfoController {
     /**
      * 主页数据
      *
-     * @param enterpriseId 教练ID
+     * @param enterpriseId 康复师ID
      * @return 结果
      */
     @GetMapping("/homeData")
@@ -98,9 +99,8 @@ public class AgentInfoController {
      */
     @PostMapping
     public R save(AgentInfo agentInfo) {
-        notifyInfoService.addNotify(agentInfo.getStaffId(), "您好，您有新的任务已派发，请及时查看处理");
         agentInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        // 获取教练所属学会
+        // 获取康复师所属学会
         StaffInfo staffInfo = staffInfoService.getById(agentInfo.getStaffId());
         if (staffInfo != null) {
             agentInfo.setEnterpriseId(staffInfo.getEnterpriseId());

@@ -1,11 +1,11 @@
 package cc.mrbird.febs.cos.controller;
 
 
-import cc.mrbird.febs.common.utils.R;
-import cc.mrbird.febs.cos.entity.BulletinInfo;
-import cc.mrbird.febs.cos.service.IBulletinInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cc.mrbird.febs.cos.entity.BulletinInfo;
+import cc.mrbird.febs.cos.service.IBulletinInfoService;
+import cc.mrbird.febs.common.utils.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 公共信息 控制层
+ *
  * @author FanK
  */
 @RestController
@@ -24,14 +26,20 @@ public class BulletinInfoController {
     private final IBulletinInfoService bulletinInfoService;
 
     /**
-     * 分页查询公告信息
-     * @param page
-     * @param bulletinInfo
-     * @return
+     * 分页获取公告信息
+     *
+     * @param page         分页对象
+     * @param bulletinInfo 公告信息
+     * @return 结果
      */
     @GetMapping("/page")
-    public R page(Page page, BulletinInfo bulletinInfo) {
+    public R page(Page<BulletinInfo> page, BulletinInfo bulletinInfo) {
         return R.ok(bulletinInfoService.getBulletinByPage(page, bulletinInfo));
+    }
+
+    @GetMapping("/{id}")
+    public R detail(@PathVariable("id") Integer id) {
+        return R.ok(bulletinInfoService.getById(id));
     }
 
     @GetMapping("/list")
@@ -41,8 +49,9 @@ public class BulletinInfoController {
 
     /**
      * 新增公告信息
-     * @param bulletinInfo
-     * @return
+     *
+     * @param bulletinInfo 公告信息
+     * @return 结果
      */
     @PostMapping
     public R save(BulletinInfo bulletinInfo) {
@@ -52,8 +61,9 @@ public class BulletinInfoController {
 
     /**
      * 修改公告信息
-     * @param bulletinInfo
-     * @return
+     *
+     * @param bulletinInfo 公告信息
+     * @return 结果
      */
     @PutMapping
     public R edit(BulletinInfo bulletinInfo) {
@@ -62,12 +72,12 @@ public class BulletinInfoController {
 
     /**
      * 删除公告信息
-     * @param ids
-     * @return
+     *
+     * @param ids ids
+     * @return 公告信息
      */
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(bulletinInfoService.removeByIds(ids));
     }
-
 }

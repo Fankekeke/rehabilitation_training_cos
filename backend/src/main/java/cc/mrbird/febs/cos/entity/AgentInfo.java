@@ -25,7 +25,7 @@ public class AgentInfo implements Serializable {
     private Integer id;
 
     /**
-     * 所属教练
+     * 所属康复师
      */
     private Integer staffId;
 
@@ -55,7 +55,7 @@ public class AgentInfo implements Serializable {
     private String complateDate;
 
     /**
-     * 所属教练
+     * 所属康复师
      */
     private Integer enterpriseId;
 

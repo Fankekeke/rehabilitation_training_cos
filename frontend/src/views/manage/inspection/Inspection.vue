@@ -15,7 +15,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="员工名称"
+                label="康复师名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.staffName"/>
@@ -158,10 +158,10 @@ export default {
           }
         }
       }, {
-        title: '员工名称',
+        title: '康复师名称',
         dataIndex: 'name'
       }, {
-        title: '员工头像',
+        title: '康复师头像',
         dataIndex: 'staffImages',
         customRender: (text, record, index) => {
           if (!record.staffImages) return <a-avatar shape="square" icon="user" />
@@ -220,7 +220,7 @@ export default {
           }
         }
       }, {
-        title: '巡检内容',
+        title: '回访内容',
         dataIndex: 'content',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -258,7 +258,7 @@ export default {
     },
     handleinspectionAddSuccess () {
       this.inspectionAdd.visiable = false
-      this.$message.success('新增巡检成功')
+      this.$message.success('新增回访成功')
       this.search()
     },
     edit (record) {
@@ -270,7 +270,7 @@ export default {
     },
     handleinspectionEditSuccess () {
       this.inspectionEdit.visiable = false
-      this.$message.success('修改巡检成功')
+      this.$message.success('修改回访成功')
       this.search()
     },
     handleDeptChange (value) {

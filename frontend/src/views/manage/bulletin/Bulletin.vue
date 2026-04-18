@@ -33,6 +33,7 @@
       <div class="operator">
         <a-button type="primary" ghost @click="add">新增</a-button>
         <a-button @click="batchDelete">删除</a-button>
+<!--        <a-button @click="batchDelete1">删除</a-button>-->
       </div>
       <!-- 表格区域 -->
       <a-table ref="TableInfo"
@@ -46,6 +47,8 @@
                @change="handleTableChange">
         <template slot="titleShow" slot-scope="text, record">
           <template>
+            <a-badge status="processing" v-if="record.rackUp === 1"/>
+            <a-badge status="error" v-if="record.rackUp === 0"/>
             <a-tooltip>
               <template slot="title">
                 {{ record.title }}
@@ -130,13 +133,11 @@ export default {
       return [{
         title: '标题',
         dataIndex: 'title',
-        scopedSlots: { customRender: 'titleShow' },
-        width: 300
+        ellipsis: true
       }, {
         title: '公告内容',
         dataIndex: 'content',
-        scopedSlots: { customRender: 'contentShow' },
-        width: 600
+        ellipsis: true
       }, {
         title: '发布时间',
         dataIndex: 'createDate',
@@ -146,17 +147,34 @@ export default {
           } else {
             return '- -'
           }
+        },
+        ellipsis: true
+      }, {
+        title: '消息类型',
+        dataIndex: 'type',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>系统公告</a-tag>
+            case 2:
+              return <a-tag>活动通知</a-tag>
+            case 3:
+              return <a-tag>紧急消息</a-tag>
+            default:
+              return '- -'
+          }
         }
       }, {
         title: '上传人',
-        dataIndex: 'uploader',
+        dataIndex: 'publisher',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '操作',
         dataIndex: 'operation',
@@ -199,6 +217,10 @@ export default {
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
+    },
+    batchDelete1 () {
+      this.$get('/cos/supplier-info/batchEditSupplierName').then((r) => {
+      })
     },
     batchDelete () {
       if (!this.selectedRowKeys.length) {

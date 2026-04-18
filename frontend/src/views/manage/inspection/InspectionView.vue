@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="巡检详情" @cancel="onClose" :width="1000">
+  <a-modal v-model="show" title="回访详情" @cancel="onClose" :width="1000">
     <template slot="footer">
       <a-button key="back" @click="onClose" type="danger">
         关闭
@@ -23,7 +23,7 @@
         <a-col :span="8"><b>回访时间：</b>
           {{ inspectionData.checkDate }}
         </a-col>
-        <a-col :span="8"><b>员工姓名：</b>
+        <a-col :span="8"><b>康复师姓名：</b>
           {{ inspectionData.name }}
         </a-col>
         <a-col :span="8"><b>联系方式：</b>
@@ -36,7 +36,7 @@
         <a-col :span="8"><b>回访客户：</b>
           {{ inspectionData.stationName }}
         </a-col>
-        <a-col :span="16"><b>巡检内容：</b>
+        <a-col :span="16"><b>回访内容：</b>
           {{ inspectionData.content }}
         </a-col>
       </a-row>

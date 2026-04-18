@@ -36,10 +36,10 @@ public class ServiceReserveInfoServiceImpl extends ServiceImpl<ServiceReserveInf
     private final IStaffInfoService staffInfoService;
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @Override
@@ -48,7 +48,7 @@ public class ServiceReserveInfoServiceImpl extends ServiceImpl<ServiceReserveInf
     }
 
     /**
-     * 获取服务预约详情
+     * 获取治疗过程详情
      *
      * @param id ID
      * @return 结果
@@ -59,10 +59,10 @@ public class ServiceReserveInfoServiceImpl extends ServiceImpl<ServiceReserveInf
     }
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @Override
@@ -71,10 +71,10 @@ public class ServiceReserveInfoServiceImpl extends ServiceImpl<ServiceReserveInf
     }
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @Override

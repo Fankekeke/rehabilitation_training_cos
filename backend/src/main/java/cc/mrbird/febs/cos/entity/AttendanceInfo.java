@@ -25,7 +25,7 @@ public class AttendanceInfo implements Serializable {
     private Integer id;
 
     /**
-     * 所属教练
+     * 所属康复师
      */
     private Integer staffId;
 

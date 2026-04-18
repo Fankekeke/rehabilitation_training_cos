@@ -33,21 +33,16 @@ public class NotifyInfo implements Serializable {
      * 用户编号
      */
     private Integer userId;
-    private Integer staffId;
 
     /**
      * 消息内容
      */
     private String content;
-    private String status;
 
     /**
      * 删除标识
      */
     private Integer delFlag;
-
-
-    private Integer enterpriseId;
 
     /**
      * 创建时间
@@ -57,16 +52,13 @@ public class NotifyInfo implements Serializable {
     private String name;
 
     @TableField(exist = false)
-    private String staffName;
-
-    @TableField(exist = false)
     private String userName;
 
-    public NotifyInfo(String userCode, Integer delFlag, String createDate, String name) {
+    public NotifyInfo(Integer userId, String userCode, String content, String createDate) {
+        this.userId = userId;
         this.userCode = userCode;
-        this.delFlag = delFlag;
+        this.content = content;
         this.createDate = createDate;
-        this.name = name;
     }
     public NotifyInfo() {}
 

@@ -4,6 +4,8 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IUserInfoService;
+import cc.mrbird.febs.system.domain.User;
+import cc.mrbird.febs.system.service.UserService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ public class UserInfoController {
 
     private final IUserInfoService userInfoService;
 
+    private final UserService userService;
+
     @GetMapping("/detail/{userId}")
     public R userDetail(@PathVariable("userId") Integer userId) {
         return R.ok(userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId)));
@@ -37,6 +41,16 @@ public class UserInfoController {
     @GetMapping("/page")
     public R page(Page page, UserInfo userInfo) {
         return R.ok();
+    }
+
+    /**
+     * 用户详情
+     * @param userId
+     * @return
+     */
+    @GetMapping("/queryDetail")
+    public R queryDetail(Integer userId) {
+        return R.ok(userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, userId)));
     }
 
     @GetMapping("/list")
@@ -63,6 +77,8 @@ public class UserInfoController {
      */
     @PutMapping
     public R edit(UserInfo userInfo) {
+        UserInfo userInfoFix = userInfoService.getById(userInfo.getId());
+        userService.update(Wrappers.<User>lambdaUpdate().set(User::getName, userInfo.getName()).set(User::getImages, userInfo.getImages()).eq(User::getUserId, userInfoFix.getUserId()));
         return R.ok(userInfoService.updateById(userInfo));
     }
 

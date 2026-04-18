@@ -1,11 +1,10 @@
 package cc.mrbird.febs.cos.controller;
 
 
-import cc.mrbird.febs.common.utils.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cc.mrbird.febs.cos.entity.NotifyInfo;
 import cc.mrbird.febs.cos.service.INotifyInfoService;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cc.mrbird.febs.common.utils.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +34,27 @@ public class NotifyInfoController {
     }
 
     /**
-     * 获取消息通知信息列表
+     * 获取用户消息通知信息列表
      *
-     * @param userId 用户ID
-     * @return 结果
+     * @param page       分页对象
+     * @param notifyInfo 搜索条件
+     * @return 列表
      */
     @GetMapping("/queryNotifyByUser")
-    public R queryNotifyByUser(Integer userId) {
-        return R.ok(notifyInfoService.queryNotifyByUser(userId));
+    public R queryNotifyByUser(Page<NotifyInfo> page, NotifyInfo notifyInfo) {
+        return R.ok(notifyInfoService.queryNotifyByUser(page, notifyInfo));
+    }
+
+    /**
+     * 获取康复师消息通知信息列表
+     *
+     * @param page       分页对象
+     * @param notifyInfo 搜索条件
+     * @return 列表
+     */
+    @GetMapping("/queryNotifyByStaff")
+    public R queryNotifyByStaff(Page<NotifyInfo> page, NotifyInfo notifyInfo) {
+        return R.ok(notifyInfoService.queryNotifyByStaff(page, notifyInfo));
     }
 
     /**
@@ -86,17 +98,6 @@ public class NotifyInfoController {
     @PutMapping
     public R edit(NotifyInfo notifyInfo) {
         return R.ok(notifyInfoService.updateById(notifyInfo));
-    }
-
-    /**
-     * 修改消息通知状态
-     *
-     * @param id id
-     * @return 结果
-     */
-    @GetMapping("/updateNotifyStatus")
-    public R updateNotifyStatus(Integer id) {
-        return R.ok(notifyInfoService.update(Wrappers.<NotifyInfo>lambdaUpdate().set(NotifyInfo::getDelFlag, "1").eq(NotifyInfo::getId, id)));
     }
 
     /**

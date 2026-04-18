@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 教练管理
+ * 康复师管理
  *
  * @author FanK
  */
@@ -29,7 +29,7 @@ public class StaffInfo implements Serializable {
     private Integer id;
 
     /**
-     * 教练编号
+     * 康复师编号
      */
     private String code;
 
@@ -108,9 +108,10 @@ public class StaffInfo implements Serializable {
      * 用户ID
      */
     private Integer userId;
+    private Integer sysUserId;
 
     /**
-     * 所属教练
+     * 所属康复师
      */
     private Integer enterpriseId;
 

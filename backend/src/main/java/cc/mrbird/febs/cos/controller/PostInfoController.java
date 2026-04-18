@@ -1,17 +1,18 @@
 package cc.mrbird.febs.cos.controller;
 
 
-import cc.mrbird.febs.common.exception.FebsException;
-import cc.mrbird.febs.common.service.CacheService;
-import cc.mrbird.febs.common.utils.R;
-import cc.mrbird.febs.cos.entity.*;
-import cc.mrbird.febs.cos.service.*;
-import cc.mrbird.febs.system.domain.User;
-import cc.mrbird.febs.system.service.UserService;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cc.mrbird.febs.cos.entity.*;
+import cc.mrbird.febs.cos.service.*;
+import cc.mrbird.febs.common.service.CacheService;
+import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.system.domain.User;
+import cc.mrbird.febs.system.service.UserService;
+import com.github.houbb.sensitive.word.core.SensitiveWordHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author FanK
@@ -32,13 +34,11 @@ public class PostInfoController {
 
     private final IPostInfoService postInfoService;
 
-    private final ISensitiveInfoService sensitiveInfoService;
-
     private final ICollectInfoService collectInfoService;
 
-    private final IMessageInfoService messageInfoService;
-
     private final IFocusInfoService focusInfoService;
+
+    private final INotifyInfoService notifyInfoService;
 
     private final UserService userService;
 
@@ -56,6 +56,17 @@ public class PostInfoController {
     @GetMapping("/user/page")
     public R userPage(Page page, User user) {
         return R.ok(postInfoService.selectUserPage(page, user));
+    }
+
+    /**
+     * 获取模块下的贴子
+     *
+     * @param tagId
+     * @return
+     */
+    @GetMapping("/tagByUser")
+    public R getPostByTagUser(Integer tagId, Integer userId) {
+        return R.ok(postInfoService.getPostByTagUser(tagId, userId));
     }
 
     /**
@@ -93,6 +104,17 @@ public class PostInfoController {
             }
         };
         return R.ok(result);
+    }
+
+    /**
+     * 获取用户详情
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/user/detail")
+    public R queryUserDetail(Integer userId) {
+        return R.ok(postInfoService.queryUserDetail(userId));
     }
 
     /**
@@ -181,12 +203,16 @@ public class PostInfoController {
             String username = user != null ? user.getName() : "用户";
             // 消息通知
             List<FocusInfo> focusInfoList = focusInfoService.list(Wrappers.<FocusInfo>lambdaQuery().eq(FocusInfo::getCollectUserId, postInfo.getUserId()).eq(FocusInfo::getDeleteFlag, 0));
-            List<MessageInfo> messageInfoList = new ArrayList<>();
-            String message = "您关注的" + username + "发布了新贴子 《" + postInfo.getTitle() + "》，快去回复吧";
-            for (FocusInfo focusInfo : focusInfoList) {
-                messageInfoList.add(new MessageInfo(focusInfo.getUserId(), message, DateUtil.formatDateTime(new Date()), 0));
+            if (CollectionUtil.isNotEmpty(focusInfoList)) {
+                List<String> userCodeList = focusInfoList.stream().map(FocusInfo::getUserId).map(String::valueOf).collect(Collectors.toList());
+                List<UserInfo> userInfoList = userInfoService.list(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getCode, userCodeList));
+                List<NotifyInfo> messageInfoList = new ArrayList<>();
+                String message = "您关注的" + username + "发布了新贴子 《" + postInfo.getTitle() + "》，快去回复吧";
+                for (UserInfo userInfo : userInfoList) {
+                    messageInfoList.add(new NotifyInfo(Math.toIntExact(userInfo.getId()), userInfo.getCode(), message, DateUtil.formatDateTime(new Date())));
+                }
+                notifyInfoService.saveBatch(messageInfoList);
             }
-            messageInfoService.saveBatch(messageInfoList);
             postInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
             postInfo.setDeleteFlag(0);
             postInfo.setPageviews(0);
@@ -228,11 +254,8 @@ public class PostInfoController {
      */
     public String contentCheck(String content) {
         String result = "";
-        List<SensitiveInfo> sensitiveInfoList = sensitiveInfoService.list(Wrappers.<SensitiveInfo>lambdaQuery().eq(SensitiveInfo::getDeleteFlag, 0));
-        for (SensitiveInfo item : sensitiveInfoList) {
-            if (content.contains(item.getKeyName())) {
-                result = item.getKeyName() + "使用不规范，请更改";
-            }
+        if (SensitiveWordHelper.contains(content)) {
+            return SensitiveWordHelper.findFirst(content) + " ， 使用不规范，请更改";
         }
         return result;
     }

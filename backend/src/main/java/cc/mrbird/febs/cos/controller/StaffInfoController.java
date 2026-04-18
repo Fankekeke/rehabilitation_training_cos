@@ -4,8 +4,11 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.ServiceReserveInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IServiceReserveInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
+import cc.mrbird.febs.system.domain.User;
 import cc.mrbird.febs.system.service.UserService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -33,16 +36,29 @@ public class StaffInfoController {
 
     private final UserService userService;
 
+    private final IUserInfoService userInfoService;
+
     /**
-     * 分页获取教练信息
+     * 分页获取康复师信息
      *
      * @param page          分页对象
-     * @param staffInfo 教练信息
+     * @param staffInfo 康复师信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<StaffInfo> page, StaffInfo staffInfo) {
         return R.ok(staffInfoService.selectStaffPage(page, staffInfo));
+    }
+
+    /**
+     * 查询康复师列表
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryStaffListRecommend")
+    public R queryStaffListRecommend(Integer userId) {
+        return R.ok(staffInfoService.queryStaffListRecommend(userId));
     }
 
     /**
@@ -57,9 +73,9 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取教练列表
+     * 获取康复师列表
      *
-     * @param enterpriseId 教练ID
+     * @param enterpriseId 康复师ID
      * @return 结果
      */
     @GetMapping("/queryStaffList")
@@ -68,9 +84,9 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取教练列表
+     * 获取康复师列表
      *
-     * @param staffId 教练ID
+     * @param staffId 康复师ID
      * @return 结果
      */
     @GetMapping("/queryStaffList/staff")
@@ -80,7 +96,7 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取教练信息
+     * 获取康复师信息
      *
      * @return 结果
      */
@@ -90,7 +106,7 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取教练信息
+     * 获取康复师信息
      *
      * @return 结果
      */
@@ -100,7 +116,7 @@ public class StaffInfoController {
     }
 
     /**
-     * 获取教练详细信息
+     * 获取康复师详细信息
      *
      * @param id ID
      * @return 结果
@@ -122,33 +138,43 @@ public class StaffInfoController {
     }
 
     /**
-     * 新增教练信息
+     * 新增康复师信息
      *
-     * @param staffInfo 教练信息
+     * @param staffInfo 康复师信息
      * @return 结果
      */
     @PostMapping
     public R save(StaffInfo staffInfo) throws Exception {
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         staffInfo.setCode("STF-" + System.currentTimeMillis());
-
-//        userService.registStaff(staffInfo.getCode(), "1234qwer", staffInfo);
+        userService.registerStaff(staffInfo);
         return R.ok(true);
     }
 
     /**
-     * 修改教练信息
+     * 修改康复师信息
      *
-     * @param staffInfo 教练信息
+     * @param staffInfo 康复师信息
      * @return 结果
      */
     @PutMapping
     public R edit(StaffInfo staffInfo) {
+        UserInfo userInfo = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery()
+                .eq(UserInfo::getUserStaffId, staffInfo.getId()));
+        if (userInfo != null) {
+            userInfo.setName(staffInfo.getName());
+            userInfo.setImages(staffInfo.getImages());
+            userInfoService.updateById(userInfo);
+        }
+        StaffInfo staffInfo1 = staffInfoService.getById(staffInfo.getId());
+        if (staffInfo1.getUserId() != null) {
+            userService.update(Wrappers.<User>lambdaUpdate().set(User::getName, staffInfo.getName()).set(User::getImages, staffInfo.getImages()).eq(User::getUserId, staffInfo1.getUserId()));
+        }
         return R.ok(staffInfoService.updateById(staffInfo));
     }
 
     /**
-     * 删除教练信息
+     * 删除康复师信息
      *
      * @param ids 主键IDS
      * @return 结果

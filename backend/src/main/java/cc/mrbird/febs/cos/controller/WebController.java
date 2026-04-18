@@ -125,7 +125,7 @@ public class WebController {
             }
             System.out.println(warning);
             user.setImages(warning);
-            return R.ok(userService.registUser(user, "1234qwer"));
+            return R.ok(true);
         }
     }
 
@@ -273,16 +273,6 @@ public class WebController {
         return R.ok(postInfoService.getPostByTag(null));
     }
 
-    /**
-     * 根据用户获取贴子信息
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-    @GetMapping("/getPostByUser")
-    public R getPostByUser(@RequestParam("userId") Integer userId) {
-        return R.ok(postInfoService.getPostByUser(userId));
-    }
 
     /**
      * 删除贴子信息
@@ -336,17 +326,6 @@ public class WebController {
             }
         }
         return R.ok(chatRecordInfoService.save(chatRecordInfo));
-    }
-
-    /**
-     * 根据贴子编号获取详细信息
-     *
-     * @param postId
-     * @return 结果
-     */
-    @GetMapping("/getPostInfoById")
-    public R getPostInfoById(@RequestParam Integer postId, @RequestParam(value = "userId", required = false) String userId) {
-        return R.ok(postInfoService.getPostInfoById(postId));
     }
 
     @GetMapping("/home")
@@ -524,27 +503,6 @@ public class WebController {
     @GetMapping("/delMessage")
     public R delMessage(@RequestParam("messageId") Integer messageId) {
         return R.ok(messageInfoMapper.deleteById(messageId));
-    }
-
-    /**
-     * 查询帖子及用户信息
-     *
-     * @return 结果
-     */
-    @GetMapping("/selShopDetailList")
-    public R selShopDetailList(@RequestParam(value = "key", required = false) String key) {
-        return R.ok(postInfoService.querySearch(key));
-    }
-
-    /**
-     * 获取用户及贴子详细信息
-     *
-     * @param userId 用户ID
-     * @return 结果
-     */
-    @GetMapping("/getShopDetail")
-    public R getShopDetail(@RequestParam Integer userId) {
-        return R.ok(postInfoService.getUserPostDetail(userId));
     }
 
     /**

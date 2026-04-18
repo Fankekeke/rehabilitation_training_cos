@@ -15,16 +15,16 @@ import java.util.List;
 public interface ServiceReserveInfoMapper extends BaseMapper<ServiceReserveInfo> {
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> querySerciceReservePage(Page<ServiceReserveInfo> page, @Param("serviceReserveInfo") ServiceReserveInfo serviceReserveInfo);
 
     /**
-     * 获取服务预约详情
+     * 获取治疗过程详情
      *
      * @param id ID
      * @return 结果
@@ -32,19 +32,19 @@ public interface ServiceReserveInfoMapper extends BaseMapper<ServiceReserveInfo>
     LinkedHashMap<String, Object> getDetail(@Param("id") Integer id);
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryOwnerServicePage(Page<ServiceReserveInfo> page, @Param("serviceReserveInfo") ServiceReserveInfo serviceReserveInfo);
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryWorkerServicePage(Page<ServiceReserveInfo> page, @Param("serviceReserveInfo") ServiceReserveInfo serviceReserveInfo);

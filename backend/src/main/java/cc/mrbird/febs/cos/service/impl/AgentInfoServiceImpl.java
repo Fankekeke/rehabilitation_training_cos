@@ -52,7 +52,7 @@ public class AgentInfoServiceImpl extends ServiceImpl<AgentInfoMapper, AgentInfo
     /**
      * 主页数据
      *
-     * @param enterpriseId 教练ID
+     * @param enterpriseId 康复师ID
      * @return 结果
      */
     @Override
@@ -60,7 +60,7 @@ public class AgentInfoServiceImpl extends ServiceImpl<AgentInfoMapper, AgentInfo
 
         // 返回数据
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-        // 查询教练信息
+        // 查询康复师信息
         Integer staffNum = staffInfoMapper.selectCount(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getDelFlag, "0"));
 
         // 总任务数量

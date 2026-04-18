@@ -68,6 +68,8 @@ public class UserInfo implements Serializable {
     private String userName;
 
     private String avatar;
+    private String type;
+    private Integer userStaffId;
 
     @TableField(exist = false)
     private Integer focusNum;

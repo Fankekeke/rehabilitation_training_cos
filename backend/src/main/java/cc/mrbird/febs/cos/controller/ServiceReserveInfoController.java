@@ -35,10 +35,10 @@ public class ServiceReserveInfoController {
     private final IStaffInfoService staffInfoService;
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @GetMapping("/page")
@@ -47,10 +47,10 @@ public class ServiceReserveInfoController {
     }
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @GetMapping("/queryOwnerServicePage")
@@ -59,10 +59,10 @@ public class ServiceReserveInfoController {
     }
 
     /**
-     * 分页获取服务预约信息
+     * 分页获取治疗过程信息
      *
      * @param page               分页对象
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @GetMapping("/queryWorkerServicePage")
@@ -101,7 +101,7 @@ public class ServiceReserveInfoController {
     @GetMapping("/wordOrderFinish")
     public R wordOrderFinish(@RequestParam("orderId") Integer orderId) {
         ServiceReserveInfo serviceReserveInfo = serviceReserveInfoService.getById(orderId);
-        // 更新员工积分
+        // 更新康复师积分
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getId, serviceReserveInfo.getWorkUserId()));
         if (staffInfo.getIntegral() == null) {
             staffInfo.setIntegral(BigDecimal.ZERO);
@@ -126,9 +126,9 @@ public class ServiceReserveInfoController {
     }
 
     /**
-     * 服务预约信息详情
+     * 治疗过程信息详情
      *
-     * @param id 服务预约ID
+     * @param id 治疗过程ID
      * @return 结果
      */
     @GetMapping("/{id}")
@@ -137,7 +137,7 @@ public class ServiceReserveInfoController {
     }
 
     /**
-     * 服务预约信息列表
+     * 治疗过程信息列表
      *
      * @return 结果
      */
@@ -147,14 +147,14 @@ public class ServiceReserveInfoController {
     }
 
     /**
-     * 新增服务预约信息
+     * 新增治疗过程信息
      *
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @PostMapping
     public R save(ServiceReserveInfo serviceReserveInfo) {
-        // 获取所属教练
+        // 获取所属康复师
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, serviceReserveInfo.getUserId()));
         if (staffInfo != null) {
             serviceReserveInfo.setUserId(staffInfo.getId());
@@ -169,9 +169,9 @@ public class ServiceReserveInfoController {
     }
 
     /**
-     * 修改服务预约信息
+     * 修改治疗过程信息
      *
-     * @param serviceReserveInfo 服务预约信息
+     * @param serviceReserveInfo 治疗过程信息
      * @return 结果
      */
     @PutMapping
@@ -180,10 +180,10 @@ public class ServiceReserveInfoController {
     }
 
     /**
-     * 删除服务预约信息
+     * 删除治疗过程信息
      *
      * @param ids ids
-     * @return 服务预约信息
+     * @return 治疗过程信息
      */
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {

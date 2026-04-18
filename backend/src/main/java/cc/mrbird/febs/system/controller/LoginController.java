@@ -155,9 +155,8 @@ public class LoginController {
     @PostMapping("regist")
     public void regist(
             @NotBlank(message = "{required}") String username,
-            @NotBlank(message = "{required}") String password,
-            @NotBlank(message = "{required}") String name) throws Exception {
-        this.userService.regist(username, password, name);
+            @NotBlank(message = "{required}") String password) throws Exception {
+        this.userService.regist(username, password);
     }
 
     private String saveTokenToRedis(User user, JWTToken token, HttpServletRequest request) throws Exception {

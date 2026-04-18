@@ -25,7 +25,7 @@
                 <head-info title="器材数量" :content="titleData.staffNum" :center="false" :bordered="false"/>
               </a-col>
               <a-col :span="4">
-                <head-info title="员工数量" :content="titleData.roomNum" :center="false" :bordered="false"/>
+                <head-info title="康复师数量" :content="titleData.roomNum" :center="false" :bordered="false"/>
               </a-col>
               <a-col :span="4">
                 <head-info title="总收益" :content="titleData.amount" :center="false"/>

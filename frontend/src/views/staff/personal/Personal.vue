@@ -85,6 +85,28 @@
             ]"/>
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item label='康复专攻' v-bind="formItemLayout">
+                <a-select v-decorator="[
+            'deptId'
+            ]">
+                  <a-select-option v-for="dept in deptList" :key="dept.id" :value="dept.id">
+                    {{ dept.deptName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label='岗位' v-bind="formItemLayout">
+                <a-select v-decorator="[
+            'positionId'
+            ]">
+                  <a-select-option v-for="position in positionList" :key="position.id" :value="position.id">
+                    {{ position.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item label='照片' v-bind="formItemLayout">
                 <a-upload
@@ -165,13 +187,27 @@ export default {
       fileList: [],
       previewVisible: false,
       previewImage: '',
-      expertInfo: null
+      expertInfo: null,
+      deptList: [],
+      positionList: []
     }
   },
   mounted () {
     this.getExpertInfo(this.currentUser.userId)
+    this.queryDeptList()
+    this.queryPositionList()
   },
   methods: {
+    queryDeptList () {
+      this.$get('/cos/dept-info/list').then((r) => {
+        this.deptList = r.data.data
+      })
+    },
+    queryPositionList () {
+      this.$get('/cos/position-info/list').then((r) => {
+        this.positionList = r.data.data
+      })
+    },
     isDuringDate (beginDateStr, endDateStr, curDataStr) {
       let curDate = new Date(curDataStr)
       let beginDate = new Date(beginDateStr)

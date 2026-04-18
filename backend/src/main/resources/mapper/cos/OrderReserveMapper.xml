@@ -12,6 +12,13 @@
         ore.create_date,
         ore.service_id,
         ore.reserve_date,
+
+        ore.type,
+        ore.images,
+        ore.content,
+        ore.status,
+
+
         ui1.name as staffName,
         ui1.images as staffImages,
         sri.`type`,

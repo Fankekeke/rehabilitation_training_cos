@@ -57,9 +57,9 @@ public class AttendanceInfoServiceImpl extends ServiceImpl<AttendanceInfoMapper,
     }
 
     /**
-     * 根据教练ID查询考勤打卡
+     * 根据康复师ID查询考勤打卡
      *
-     * @param staffId 教练ID
+     * @param staffId 康复师ID
      * @return 结果
      */
     @Override
@@ -99,13 +99,9 @@ public class AttendanceInfoServiceImpl extends ServiceImpl<AttendanceInfoMapper,
         AttendanceInfo todayCheck = this.checkWorkByToday(attendanceInfo.getStaffId());
         if (todayCheck == null) {
             attendanceInfo.setPutTakeDate(DateUtil.formatDateTime(new Date()));
-            // 添加通知
-            notifyInfoService.addNotify(attendanceInfo.getStaffId(), "您好，打卡成功！");
             return this.save(attendanceInfo);
         } else {
             attendanceInfo.setOutTakeDate(DateUtil.formatDateTime(new Date()));
-            // 添加通知
-            notifyInfoService.addNotify(attendanceInfo.getStaffId(), "辛苦了，levelRuleInfo打卡成功！");
             return this.updateById(attendanceInfo);
         }
     }
@@ -113,7 +109,7 @@ public class AttendanceInfoServiceImpl extends ServiceImpl<AttendanceInfoMapper,
     /**
      * 获取当天打卡状态
      *
-     * @param staffId 教练ID
+     * @param staffId 康复师ID
      * @return 结果
      */
     @Override

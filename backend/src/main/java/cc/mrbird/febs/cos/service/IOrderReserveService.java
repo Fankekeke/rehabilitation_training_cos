@@ -21,4 +21,6 @@ public interface IOrderReserveService extends IService<OrderReserve> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryReservePage(Page<OrderReserve> page, OrderReserve orderReserve);
+
+
 }

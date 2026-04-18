@@ -50,7 +50,7 @@ public class DeptInfo implements Serializable {
     private String createBy;
 
     /**
-     * 所属教练
+     * 所属康复师
      */
     private Integer enterpriseId;
 

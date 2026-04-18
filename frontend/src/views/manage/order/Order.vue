@@ -7,7 +7,7 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="订单编号"
+                label="项目编号"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.code"/>
@@ -141,7 +141,7 @@ export default {
     }),
     columns () {
       return [{
-        title: '订单编号',
+        title: '项目编号',
         dataIndex: 'code',
         ellipsis: true
       }, {
@@ -161,6 +161,10 @@ export default {
               return <a-tag>双手臂训练</a-tag>
             case '6':
               return <a-tag>胸部肌肉训练</a-tag>
+            case '7':
+              return <a-tag>运动心肺训练</a-tag>
+            case '8':
+              return <a-tag>脊柱矫正训练</a-tag>
             default:
               return '- -'
           }
@@ -238,8 +242,8 @@ export default {
       this.orderEvaluateView.visiable = true
     },
     orderReceive (record) {
-      this.$get('/cos/service-reserve-info/wordOrderFinish', {orderId: record.id}).then(() => {
-        this.$message.success('订单完成成功')
+      this.$get('/cos/order-reserve/wordOrderFinish', {orderId: record.id}).then(() => {
+        this.$message.success('治疗项目完成成功')
         this.search()
       })
     },
@@ -281,7 +285,7 @@ export default {
     },
     handlepharmacyAddSuccess () {
       this.pharmacyAdd.visiable = false
-      this.$message.success('新增订单成功')
+      this.$message.success('新增治疗项目成功')
       this.search()
     },
     handleorderAddClose () {
@@ -301,7 +305,7 @@ export default {
     },
     handleinspectionEditSuccess () {
       this.inspectionEdit.visiable = false
-      this.$message.success('修改巡检成功')
+      this.$message.success('修改回访成功')
       this.search()
     },
     handleorderEditClose () {
@@ -309,7 +313,7 @@ export default {
     },
     handleorderEditSuccess () {
       this.orderEdit.visiable = false
-      this.$message.success('修改订单成功')
+      this.$message.success('修改治疗项目成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -327,7 +331,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/service-reserve-info/' + ids).then(() => {
+          that.$delete('/cos/order-reserve/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -397,7 +401,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/service-reserve-info/queryWorkerServicePage', {
+      this.$get('/cos/order-reserve/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

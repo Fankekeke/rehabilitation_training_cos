@@ -96,8 +96,8 @@
       <br/>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;" v-if="repairData.worker !== null">
-        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">维修员工信息</span></a-col>
-        <a-col :span="8"><b>员工姓名：</b>
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">维修康复师信息</span></a-col>
+        <a-col :span="8"><b>康复师姓名：</b>
           <a-popover>
             <template slot="content">
               <a-avatar v-if="repairData.workerImage !== null" shape="square" :size="132" icon="user" :src="'http://127.0.0.1:9527/imagesWeb/' + repairData.workerImage.split(',')[0]" />

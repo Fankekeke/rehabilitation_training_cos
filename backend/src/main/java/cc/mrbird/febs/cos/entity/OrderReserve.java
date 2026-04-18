@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 课程预约
+ * 治疗项目
  *
  * @author FanK
  */
@@ -35,6 +35,14 @@ public class OrderReserve implements Serializable {
      * 所属用户
      */
     private Integer userId;
+
+    private String type;
+
+    private String images;
+
+    private String content;
+
+    private String status;
 
     /**
      * 价格

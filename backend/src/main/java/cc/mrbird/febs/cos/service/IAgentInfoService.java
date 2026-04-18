@@ -26,7 +26,7 @@ public interface IAgentInfoService extends IService<AgentInfo> {
     /**
      * 主页数据
      *
-     * @param enterpriseId 教练ID
+     * @param enterpriseId 康复师ID
      * @return 结果
      */
     LinkedHashMap<String, Object> homeData(Integer enterpriseId);

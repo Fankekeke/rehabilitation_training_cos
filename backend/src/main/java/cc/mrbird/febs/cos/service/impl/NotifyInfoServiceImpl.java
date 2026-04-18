@@ -1,19 +1,13 @@
 package cc.mrbird.febs.cos.service.impl;
 
-import cc.mrbird.febs.cos.dao.NotifyInfoMapper;
-import cc.mrbird.febs.cos.entity.NotifyInfo;
-import cc.mrbird.febs.cos.entity.StaffInfo;
-import cc.mrbird.febs.cos.service.INotifyInfoService;
-import cc.mrbird.febs.cos.service.IStaffInfoService;
-import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import cc.mrbird.febs.cos.dao.NotifyInfoMapper;
+import cc.mrbird.febs.cos.entity.NotifyInfo;
+import cc.mrbird.febs.cos.service.INotifyInfoService;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -21,10 +15,7 @@ import java.util.List;
  * @author FanK fan1ke2ke@gmail.com
  */
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class NotifyInfoServiceImpl extends ServiceImpl<NotifyInfoMapper, NotifyInfo> implements INotifyInfoService {
-
-    private final IStaffInfoService staffInfoService;
 
     /**
      * 分页获取消息通知信息
@@ -37,32 +28,21 @@ public class NotifyInfoServiceImpl extends ServiceImpl<NotifyInfoMapper, NotifyI
     public IPage<LinkedHashMap<String, Object>> queryNotifyPage(Page<NotifyInfo> page, NotifyInfo notifyInfo) {
         return baseMapper.queryNotifyPage(page, notifyInfo);
     }
-
     /**
-     * 添加消息通知
+     * 获取用户消息通知信息列表
      *
-     * @param userId  用户ID
-     * @param content 内容
-     * @return 结果
+     * @param page       分页对象
+     * @param notifyInfo 搜索条件
+     * @return 列表
      */
     @Override
-    public boolean addNotify(Integer userId, String content) {
-        // 获取教练信息
-        StaffInfo staffInfo = staffInfoService.getById(userId);
-        if (staffInfo == null) {
-            return false;
-        }
+    public IPage<LinkedHashMap<String, Object>> queryNotifyByUser(Page<NotifyInfo> page, NotifyInfo notifyInfo) {
+        return baseMapper.queryNotifyByUser(page, notifyInfo);
+    }
 
-        NotifyInfo notifyInfo = new NotifyInfo();
-        notifyInfo.setUserCode(staffInfo.getCode());
-        notifyInfo.setUserId(staffInfo.getId());
-        notifyInfo.setStaffId(staffInfo.getId());
-        notifyInfo.setStatus("0");
-        notifyInfo.setContent(content);
-        notifyInfo.setDelFlag(0);
-        notifyInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-
-        return this.save(notifyInfo);
+    @Override
+    public IPage<LinkedHashMap<String, Object>> queryNotifyByStaff(Page<NotifyInfo> page, NotifyInfo notifyInfo) {
+        return baseMapper.queryNotifyByStaff(page, notifyInfo);
     }
 
     /**
@@ -73,6 +53,6 @@ public class NotifyInfoServiceImpl extends ServiceImpl<NotifyInfoMapper, NotifyI
      */
     @Override
     public List<LinkedHashMap<String, Object>> queryNotifyByUser(Integer userId) {
-        return baseMapper.queryNotifyByUser(userId);
+        return baseMapper.queryNotifyByUserId(userId);
     }
 }

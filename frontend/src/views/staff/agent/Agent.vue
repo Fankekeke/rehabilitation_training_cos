@@ -145,7 +145,7 @@ export default {
           </a-popover>
         }
       }, {
-        title: '所属小组',
+        title: '专攻项目',
         ellipsis: true,
         dataIndex: 'deptName'
       }, {

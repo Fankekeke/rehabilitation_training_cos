@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 服务预约
+ * 治疗过程
  *
  * @author FanK
  */
@@ -72,7 +72,7 @@ public class ServiceReserveInfo implements Serializable {
     private BigDecimal latitude;
 
     /**
-     * 状态（0.下架 1.上架）
+     * 状态（0.未支付 1.治疗中 2.已结束）
      */
     private String status;
 
@@ -85,6 +85,11 @@ public class ServiceReserveInfo implements Serializable {
      * 创建时间
      */
     private String createDate;
+
+    /**
+     * 康复内容
+     */
+    private String fixContent;
 
     @TableField(exist = false)
     private String workName;
