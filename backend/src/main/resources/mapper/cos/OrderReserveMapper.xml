@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.cos.dao.OrderReserveMapper">
+
+    <!-- 分页获取健身设施信息 -->
+    <select id="queryReservePage" resultType="java.util.LinkedHashMap">
+        select
+        ore.id,
+        ore.code,
+        ore.user_id,
+        ore.total_price,
+        ore.create_date,
+        ore.service_id,
+        ore.reserve_date,
+        ui1.name as staffName,
+        ui1.images as staffImages,
+        sri.`type`,
+        sri.content,
+        sri.images,
+        ui.name as userName,
+        ui.images as userImages
+        from order_reserve ore
+        left join service_reserve_info sri on
+        (sri.id = ore.service_id)
+        left join user_info ui on
+        (ui.id = ore.user_id)
+        left join staff_info ui1 on
+        (ui1.id = sri.user_id)
+        where 1 = 1
+        <if test="orderReserve.userName != null and orderReserve.userName != ''">
+            AND ui.name LIKE CONCAT('%',#{orderReserve.userName},'%')
+        </if>
+        <if test="orderReserve.staffName != null and orderReserve.staffName != ''">
+            AND ui1.name LIKE CONCAT('%',#{orderReserve.staffName},'%')
+        </if>
+        <if test="orderReserve.code != null and orderReserve.code != ''">
+            AND ore.code LIKE CONCAT('%',#{orderReserve.staffName},'%')
+        </if>
+    </select>
+</mapper>
