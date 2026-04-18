@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 研究任务
+ * 代办任务
  *
  * @author FanK fan1ke2ke@gmail.com
  */

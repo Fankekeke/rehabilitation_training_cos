@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 研究任务 控制层
+ * 代办任务 控制层
  *
  * @author FanK fan1ke2ke@gmail.com
  */
@@ -33,10 +33,10 @@ public class AgentInfoController {
     private final IStaffInfoService staffInfoService;
 
     /**
-     * 分页获取研究任务
+     * 分页获取代办任务
      *
      * @param page      分页对象
-     * @param agentInfo 研究任务
+     * @param agentInfo 代办任务
      * @return 结果
      */
     @GetMapping("/page")
@@ -45,7 +45,7 @@ public class AgentInfoController {
     }
 
     /**
-     * 查询研究任务详情
+     * 查询代办任务详情
      *
      * @param id 主键ID
      * @return 结果
@@ -56,7 +56,7 @@ public class AgentInfoController {
     }
 
     /**
-     * 查询研究任务列表
+     * 查询代办任务列表
      *
      * @return 结果
      */
@@ -66,7 +66,7 @@ public class AgentInfoController {
     }
 
     /**
-     * 完成研究任务
+     * 完成代办任务
      *
      * @param id 主键
      * @return 结果
@@ -91,9 +91,9 @@ public class AgentInfoController {
     }
 
     /**
-     * 新增研究任务
+     * 新增代办任务
      *
-     * @param agentInfo 研究任务
+     * @param agentInfo 代办任务
      * @return 结果
      */
     @PostMapping
@@ -110,9 +110,9 @@ public class AgentInfoController {
     }
 
     /**
-     * 修改研究任务
+     * 修改代办任务
      *
-     * @param agentInfo 研究任务
+     * @param agentInfo 代办任务
      * @return 结果
      */
     @PutMapping
@@ -121,10 +121,10 @@ public class AgentInfoController {
     }
 
     /**
-     * 删除研究任务
+     * 删除代办任务
      *
      * @param ids ids
-     * @return 研究任务
+     * @return 代办任务
      */
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {

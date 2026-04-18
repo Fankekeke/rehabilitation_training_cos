@@ -37,7 +37,7 @@ public class ServiceReserveInfo implements Serializable {
     private Integer userId;
 
     /**
-     * 作业类型（1.房间清洁 2.家电维修 3.家具安装 4.搬家 5.全屋装修 6.水电维修）
+     * 作业类型
      */
     private String type;
 
