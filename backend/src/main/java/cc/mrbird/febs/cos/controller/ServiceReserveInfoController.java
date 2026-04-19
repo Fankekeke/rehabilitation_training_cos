@@ -46,6 +46,7 @@ public class ServiceReserveInfoController {
         return R.ok(serviceReserveInfoService.querySerciceReservePage(page, serviceReserveInfo));
     }
 
+
     /**
      * 分页获取治疗过程信息
      *
@@ -100,15 +101,18 @@ public class ServiceReserveInfoController {
      */
     @GetMapping("/wordOrderFinish")
     public R wordOrderFinish(@RequestParam("orderId") Integer orderId) {
-        ServiceReserveInfo serviceReserveInfo = serviceReserveInfoService.getById(orderId);
-        // 更新康复师积分
-        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getId, serviceReserveInfo.getWorkUserId()));
-        if (staffInfo.getIntegral() == null) {
-            staffInfo.setIntegral(BigDecimal.ZERO);
-        }
-        staffInfo.setIntegral(NumberUtil.add(staffInfo.getIntegral(), serviceReserveInfo.getTotalPrice()));
-        staffInfoService.updateById(staffInfo);
-        return R.ok(serviceReserveInfoService.update(Wrappers.<ServiceReserveInfo>lambdaUpdate().set(ServiceReserveInfo::getStatus, "3").eq(ServiceReserveInfo::getId, orderId)));
+        return R.ok(serviceReserveInfoService.update(Wrappers.<ServiceReserveInfo>lambdaUpdate().set(ServiceReserveInfo::getStatus, "2").eq(ServiceReserveInfo::getId, orderId)));
+    }
+
+    /**
+     * 设置治疗内容
+     *
+     * @param serviceReserveInfo 治疗内容
+     * @return 结果
+     */
+    @PutMapping("/setTreatContent")
+    public R setTreatContent(ServiceReserveInfo serviceReserveInfo) {
+        return R.ok(serviceReserveInfoService.updateById(serviceReserveInfo));
     }
 
     /**

@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 健身设施管理
+ * 康复设施管理
  *
  * @author FanK fan1ke2ke@gmail.com
  */
@@ -24,12 +24,12 @@ public class DeviceInfo implements Serializable {
     private Integer id;
 
     /**
-     * 健身设施编号
+     * 康复设施编号
      */
     private String code;
 
     /**
-     * 健身设施名称
+     * 康复设施名称
      */
     private String deviceName;
 
@@ -44,17 +44,17 @@ public class DeviceInfo implements Serializable {
     private String phone;
 
     /**
-     * 健身设施备注
+     * 康复设施备注
      */
     private String content;
 
     /**
-     * 健身设施图片
+     * 康复设施图片
      */
     private String images;
 
     /**
-     * 健身设施状态（0.废弃 1.正常 2.维修保养中）
+     * 康复设施状态（0.废弃 1.正常 2.维修保养中）
      */
     private String status;
 
@@ -64,12 +64,12 @@ public class DeviceInfo implements Serializable {
     private String createDate;
 
     /**
-     * 健身设施类型
+     * 康复设施类型
      */
     private String type;
 
     /**
-     * 健身设施地址
+     * 康复设施地址
      */
     private String address;
 

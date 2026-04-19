@@ -17,10 +17,10 @@ import java.util.LinkedHashMap;
 public class OrderReserveServiceImpl extends ServiceImpl<OrderReserveMapper, OrderReserve> implements IOrderReserveService {
 
     /**
-     * 分页获取健身设施信息
+     * 分页获取康复设施信息
      *
      * @param page       分页对象
-     * @param orderReserve 健身设施信息
+     * @param orderReserve 康复设施信息
      * @return 结果
      */
     @Override

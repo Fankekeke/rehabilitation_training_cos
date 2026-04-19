@@ -2,7 +2,9 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.ClothesInfo;
 import cc.mrbird.febs.cos.entity.DeviceInfo;
+import cc.mrbird.febs.cos.service.IClothesInfoService;
 import cc.mrbird.febs.cos.service.IDeviceInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -23,11 +26,31 @@ public class DeviceInfoController {
 
     private final IDeviceInfoService deviceInfoService;
 
+    private final IClothesInfoService clothesInfoService;
+
     /**
-     * 分页获取健身设施信息
+     * 获取数据
+     *
+     * @return 结果
+     */
+    @GetMapping("/queryData")
+    public R queryData() {
+        List<DeviceInfo> deviceInfoList = deviceInfoService.list();
+        List<ClothesInfo> clothesInfoList = clothesInfoService.list();
+        LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>() {
+            {
+                put("deviceInfoList", deviceInfoList);
+                put("clothesInfoList", clothesInfoList);
+            }
+        };
+        return R.ok(map);
+    }
+
+    /**
+     * 分页获取康复设施信息
      *
      * @param page       分页对象
-     * @param deviceInfo 健身设施信息
+     * @param deviceInfo 康复设施信息
      * @return 结果
      */
     @GetMapping("/page")
@@ -36,7 +59,7 @@ public class DeviceInfoController {
     }
 
     /**
-     * 获取健身设施信息详情
+     * 获取康复设施信息详情
      *
      * @param id 主键
      * @return 结果
@@ -47,9 +70,9 @@ public class DeviceInfoController {
     }
 
     /**
-     * 新增健身设施信息
+     * 新增康复设施信息
      *
-     * @param deviceInfo 健身设施信息
+     * @param deviceInfo 康复设施信息
      * @return 结果
      */
     @PostMapping
@@ -59,7 +82,7 @@ public class DeviceInfoController {
         return R.ok(deviceInfoService.save(deviceInfo));
     }
     /**
-     * 健身设施信息
+     * 康复设施信息
      *
      * @return 结果
      */
@@ -69,9 +92,9 @@ public class DeviceInfoController {
     }
 
     /**
-     * 修改健身设施信息
+     * 修改康复设施信息
      *
-     * @param deviceInfo 健身设施信息
+     * @param deviceInfo 康复设施信息
      * @return 结果
      */
     @PutMapping
@@ -80,7 +103,7 @@ public class DeviceInfoController {
     }
 
     /**
-     * 删除健身设施信息
+     * 删除康复设施信息
      *
      * @param ids 主键
      * @return 结果

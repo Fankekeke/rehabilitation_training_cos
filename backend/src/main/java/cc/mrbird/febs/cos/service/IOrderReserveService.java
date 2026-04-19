@@ -14,10 +14,10 @@ import java.util.LinkedHashMap;
 public interface IOrderReserveService extends IService<OrderReserve> {
 
     /**
-     * 分页获取健身设施信息
+     * 分页获取康复设施信息
      *
      * @param page       分页对象
-     * @param orderReserve 健身设施信息
+     * @param orderReserve 康复设施信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryReservePage(Page<OrderReserve> page, OrderReserve orderReserve);

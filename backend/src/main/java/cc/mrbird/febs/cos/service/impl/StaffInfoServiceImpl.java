@@ -1,5 +1,7 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.cos.dao.DeptInfoMapper;
+import cc.mrbird.febs.cos.dao.PositionInfoMapper;
 import cc.mrbird.febs.cos.dao.ServiceReserveInfoMapper;
 import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.dao.StaffInfoMapper;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,10 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
     private final IDeviceInfoService deviceInfoService;
 
     private final IAttendanceInfoService attendanceInfoService;
+
+    private final DeptInfoMapper deptInfoMapper;
+
+    private final PositionInfoMapper positionInfoMapper;
 
     /**
      * 分页获取康复师信息
@@ -64,7 +71,18 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
 
         List<ServiceReserveInfo> orderList = serviceReserveInfoService.selectList(Wrappers.<ServiceReserveInfo>lambdaQuery().eq(ServiceReserveInfo::getUserId, userInfo.getId()));
 
-        List<StaffInfo> staffInfoList = this.list();
+        List<StaffInfo> staffInfoList = staffInfoService.selectList(Wrappers.<StaffInfo>lambdaQuery());
+        List<DeptInfo> deptInfoList = deptInfoMapper.selectList(Wrappers.<DeptInfo>lambdaQuery());
+        List<PositionInfo> positionInfoList = positionInfoMapper.selectList(Wrappers.<PositionInfo>lambdaQuery());
+
+        Map<Integer, String> deptMap = deptInfoList.stream().collect(Collectors.toMap(DeptInfo::getId, DeptInfo::getDeptName));
+        Map<Integer, String> positionMap = positionInfoList.stream().collect(Collectors.toMap(PositionInfo::getId, PositionInfo::getName));
+        staffInfoList.forEach(staffInfo -> {
+            staffInfo.setDeptName(deptMap.get(staffInfo.getDeptId()));
+            staffInfo.setPositionName(positionMap.get(staffInfo.getPositionId()));
+        });
+
+
         List<OrderReserve> orderReserveList = orderReserveService.list(Wrappers.<OrderReserve>lambdaQuery().eq(OrderReserve::getStatus, 1));
         Map<Integer, List<OrderReserve>> orderReserveMap = orderReserveList.stream().collect(Collectors.groupingBy(OrderReserve::getUserId));
 
@@ -280,6 +298,109 @@ public class StaffInfoServiceImpl extends ServiceImpl<StaffInfoMapper, StaffInfo
      */
     @Override
     public LinkedHashMap<String, Object> queryHomeData() {
-        return null;
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+
+        // 1. 康复师统计
+        List<StaffInfo> staffInfoList = staffInfoService.selectList(Wrappers.<StaffInfo>lambdaQuery());
+        List<DeptInfo> deptInfoList = deptInfoMapper.selectList(Wrappers.<DeptInfo>lambdaQuery());
+        List<PositionInfo> positionInfoList = positionInfoMapper.selectList(Wrappers.<PositionInfo>lambdaQuery());
+
+        Map<Integer, String> deptMap = deptInfoList.stream().collect(Collectors.toMap(DeptInfo::getId, DeptInfo::getDeptName));
+        Map<Integer, String> positionMap = positionInfoList.stream().collect(Collectors.toMap(PositionInfo::getId, PositionInfo::getName));
+        staffInfoList.forEach(staffInfo -> {
+            staffInfo.setDeptName(deptMap.get(staffInfo.getDeptId()));
+            staffInfo.setPositionName(positionMap.get(staffInfo.getPositionId()));
+        });
+
+        // 1.1 康复师总数
+        int totalStaff = staffInfoList.size();
+
+        // 1.2 按部门统计康复师数量
+        Map<String, Long> staffByDept = staffInfoList.stream()
+                .filter(s -> s.getDeptName() != null)
+                .collect(Collectors.groupingBy(StaffInfo::getDeptName, Collectors.counting()));
+
+        // 1.3 按岗位统计康复师数量
+        Map<String, Long> staffByPosition = staffInfoList.stream()
+                .filter(s -> s.getPositionName() != null)
+                .collect(Collectors.groupingBy(StaffInfo::getPositionName, Collectors.counting()));
+
+        // 2. 康复项目订单统计（status="1"表示进行中）
+        List<OrderReserve> orderReserveList = orderReserveService.list(Wrappers.<OrderReserve>lambdaQuery().eq(OrderReserve::getStatus, "1"));
+        int activeOrders = orderReserveList.size();
+
+        // 2.1 进行中订单总金额
+        BigDecimal activeOrderTotal = orderReserveList.stream()
+                .map(OrderReserve::getTotalPrice)
+                .filter(price -> price != null)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 2.2 获取所有订单用于更多统计
+        List<OrderReserve> allOrderList = orderReserveService.list();
+        int totalOrders = allOrderList.size();
+
+        // 2.3 所有订单总金额
+        BigDecimal totalOrderAmount = allOrderList.stream()
+                .map(OrderReserve::getTotalPrice)
+                .filter(price -> price != null)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 2.4 按日期统计订单趋势（最近7天）
+        Map<String, Long> orderTrend = allOrderList.stream()
+                .filter(o -> o.getCreateDate() != null)
+                .collect(Collectors.groupingBy(
+                        o -> o.getCreateDate().substring(0, Math.min(10, o.getCreateDate().length())),
+                        Collectors.counting()
+                ));
+
+        // 3. 服务订单统计
+        List<ServiceReserveInfo> serviceReserveInfoList = serviceReserveInfoService.selectList(Wrappers.<ServiceReserveInfo>lambdaQuery());
+        int totalServices = serviceReserveInfoList.size();
+
+        // 3.1 按状态统计服务订单
+        Map<String, Long> servicesByStatus = serviceReserveInfoList.stream()
+                .filter(s -> s.getStatus() != null)
+                .collect(Collectors.groupingBy(ServiceReserveInfo::getStatus, Collectors.counting()));
+
+        // 3.2 服务总金额
+        BigDecimal totalServiceAmount = serviceReserveInfoList.stream()
+                .map(ServiceReserveInfo::getTotalPrice)
+                .filter(price -> price != null)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 3.3 治疗中的服务数量（status="1"）
+        long treatingServices = serviceReserveInfoList.stream()
+                .filter(s -> "1".equals(s.getStatus()))
+                .count();
+
+        // 3.4 已结束的服务数量（status="2"）
+        long completedServices = serviceReserveInfoList.stream()
+                .filter(s -> "2".equals(s.getStatus()))
+                .count();
+
+        // 3.5 未支付的服务数量（status="0"）
+        long unpaidServices = serviceReserveInfoList.stream()
+                .filter(s -> "0".equals(s.getStatus()))
+                .count();
+
+        // 4. 组装返回数据
+        result.put("totalStaff", totalStaff);
+        result.put("staffByDept", staffByDept);
+        result.put("staffByPosition", staffByPosition);
+
+        result.put("activeOrders", activeOrders);
+        result.put("activeOrderTotal", activeOrderTotal);
+        result.put("totalOrders", totalOrders);
+        result.put("totalOrderAmount", totalOrderAmount);
+        result.put("orderTrend", orderTrend);
+
+        result.put("totalServices", totalServices);
+        result.put("servicesByStatus", servicesByStatus);
+        result.put("totalServiceAmount", totalServiceAmount);
+        result.put("treatingServices", treatingServices);
+        result.put("completedServices", completedServices);
+        result.put("unpaidServices", unpaidServices);
+
+        return result;
     }
 }

@@ -121,6 +121,10 @@ public class StaffInfo implements Serializable {
     private Integer positionId;
 
     @TableField(exist = false)
+    private String deptName;
+    @TableField(exist = false)
+    private String positionName;
+    @TableField(exist = false)
     private BigDecimal integral;
 
     @TableField(exist = false)
